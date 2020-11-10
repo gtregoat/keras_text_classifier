@@ -12,7 +12,7 @@ class TextClassificationPipeline:
     def __init__(self,
                  sequence_length: int,
                  embeddings_dim: int,
-                 embeddings_path:str = None):
+                 embeddings_path: str = None):
         """
         This class takes care of putting the text preprocessing, label encoding and model into a classification
         pipeline.
@@ -46,6 +46,8 @@ class TextClassificationPipeline:
         """
         x = self.text_formatter.fit_transform(x)
         y_one_hot = self.label_encoder.fit_transform(y)
+        if y_one_hot.shape[1] == 1:
+            y_one_hot = np.hstack((y_one_hot, 1 - y_one_hot))
         self.model = self._fit(x,
                                y_one_hot,
                                input_dim=len(self.text_formatter.word_index) + 1,  # Number of words in the dictionary
@@ -77,6 +79,8 @@ class TextClassificationPipeline:
         """
         x = self.text_formatter.fit_transform(x)
         y_one_hot = self.label_encoder.fit_transform(y)
+        if y_one_hot.shape[1] == 1:
+            y_one_hot = np.hstack((y_one_hot, 1 - y_one_hot))
         skf = StratifiedKFold(n_splits=n_splits)
         scores = []
         for train_index, test_index in skf.split(x, y):
@@ -126,3 +130,4 @@ class TextClassificationPipeline:
         if self._embeddings is None:
             self.set_embeddings()
         return self._embeddings
+

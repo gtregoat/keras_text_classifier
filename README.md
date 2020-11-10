@@ -120,7 +120,7 @@ and generate predictions.
 ### Command line
 the repository can be run from outside this folder. All arguments start with "--"
 ```shell script
-python adthena_test --training_data adthena_test/data/trainSet.csv
+python keras_text_classifier --training_data path_to_file.csv
 ```
 Arguments:
 - training_data: path to training data
@@ -132,21 +132,6 @@ Arguments:
 this number must match the dimension of the embeddings.
 - batch_size: batch size when training the model. Defaults to 32.
 - epochs: number of epochs to train the model. Defaults to 1.
-
-### Improvements
-The model could be improved with the following:
-- Increasing the number of epochs (predictions are generated with a model trained on 20)
-- Tuning hyperparameters (no tuning was done, I adapted structures that have worked for
-me in the past)
-- Using higher-dimension word embeddings / different word embeddings. I chose the smallest 
-GloVe vectors I had, but from experience FastText works slightly better (but they
-worked slower when I used them in the past)
-- Saving / reloading the model. The label encoder and text formatter can be saved 
-with pickle, while the keras model has to be saved with Keras' save model function.
-This requires coding a specific function.
-- Keras and Tensorflow have changed since I used it last. For example, it contains
-a built in attention layer. The model could be better / clearer if it uses it.
-
 
 ### Dependencies
 Built on:

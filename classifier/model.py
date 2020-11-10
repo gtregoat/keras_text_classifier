@@ -70,7 +70,7 @@ class TextClassifier:
         # Pre-trained embeddings
         if embeddings is not None:
             vector_dim = embeddings.shape[1]
-            embedded = layers.Embedding(
+            representation = layers.Embedding(
                 input_dim=input_dim,
                 output_dim=vector_dim,
                 weights=[embeddings],
@@ -84,22 +84,22 @@ class TextClassifier:
                 output_dim=vector_dim,
                 input_length=sequence_length,
                 trainable=True)(inputs)  # In this case there are no pre-trained embeddings so training is required
-        conv = layers.Conv1D(filters=32, kernel_size=3, padding='same', activation='relu')(embedded)
-        pool = layers.MaxPooling1D(pool_size=2)(conv)
-        pool = layers.BatchNormalization()(pool)
-        recurrent = layers.LSTM(units=100, return_sequences=True)(pool)
-        # compute importance for each step (attention mechanism)
-        attention = layers.Dense(1, activation='tanh')(recurrent)
-        attention = layers.Flatten()(attention)
-        attention = layers.Activation('softmax')(attention)
-        attention = layers.RepeatVector(100)(attention)
-        attention = layers.Permute([2, 1])(attention)
-        # Complete text representation
-        representation = layers.Multiply()([recurrent, attention])
-        representation = layers.Flatten()(representation)
+            conv = layers.Conv1D(filters=32, kernel_size=3, padding='same', activation='relu')(embedded)
+            pool = layers.MaxPooling1D(pool_size=2)(conv)
+            pool = layers.BatchNormalization()(pool)
+            recurrent = layers.LSTM(units=100, return_sequences=True)(pool)
+            # compute importance for each step (attention mechanism)
+            attention = layers.Dense(1, activation='tanh')(recurrent)
+            attention = layers.Flatten()(attention)
+            attention = layers.Activation('softmax')(attention)
+            attention = layers.RepeatVector(100)(attention)
+            attention = layers.Permute([2, 1])(attention)
+            # Complete text representation
+            representation = layers.Multiply()([recurrent, attention])
+        embedded = layers.Flatten()(representation)
 
         # Classify
-        classification = layers.Dense(500, activation="relu")(representation)
+        classification = layers.Dense(500, activation="relu")(embedded)
         classification = layers.Dropout(0.4)(classification)
         classification = layers.BatchNormalization()(classification)
         classification = layers.Dense(200, activation="relu")(classification)
