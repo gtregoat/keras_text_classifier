@@ -76,11 +76,7 @@ ________________________________________________________________________________
 Training was using 400% CPU and 13G RAM on my laptop.
 
 #### Results
-These results were computed using cross-validation (4 stratified splits).
-- Accuracy: 12.15% 
-- Loss (categorical cross-entropy): 4.96
-The model was still improving steadily after 20 epochs, but it was taking quite a 
-while to compute (over 3 hours of training) so I limited the test.
+Tested on Kaggle's real or not, NLP with disaster tweets, results are pretty bad for now.
 
 ### Preprocessing
 Words are tokenized using Keras' tokenizer. The sequence length is fixed and defined
