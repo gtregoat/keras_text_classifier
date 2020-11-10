@@ -1,5 +1,8 @@
 # Text classification
 
+A bit of deep learning code that I'm planning on using in kaggle competitions to get up to speed
+in NLP.
+
 ## Model description
 
 ### Model
